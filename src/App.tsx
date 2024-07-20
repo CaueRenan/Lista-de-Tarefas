@@ -1,12 +1,15 @@
 import React from 'react';
-import Lists from './components/lists';
+import Title from './components/Title';
+import Lists from './components/Lists';
+import Tasks from './components/Tasks';
+import { IdProvider } from './context/IdContex';
 
 export default function App(): JSX.Element {
   return (
-    <>
-      <main>
-        <Lists />
-      </main>
-    </>
+    <IdProvider>
+      <Title />
+      <Lists />
+      <Tasks />
+    </IdProvider>
   );
 }

@@ -34,6 +34,6 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'warn',
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
-    'prettier/prettier': 'off',
+    // 'prettier/prettier': 'off',
   },
 };
