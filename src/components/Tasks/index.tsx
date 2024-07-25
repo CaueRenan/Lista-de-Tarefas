@@ -1,10 +1,9 @@
 import React, { FormEvent, useContext, useEffect, useState } from 'react';
-// import { getList } from '../data/get-list';
-import Button from './Button';
-import Form from './Form';
-import { getAllList } from '../data/get-all-lists';
-import { IdContext } from '../context/IdContex';
-import { getList } from '../data/get-list';
+import Button from '../Button';
+import Form from '../Form';
+import { getAllList } from '../../data/get-all-lists';
+import { IdContext } from '../../context/IdContex';
+import { getList } from '../../data/get-list';
 
 export default function Tasks(): JSX.Element {
   const { id } = useContext(IdContext);

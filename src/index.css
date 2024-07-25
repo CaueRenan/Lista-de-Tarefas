@@ -10,24 +10,8 @@ body {
   width: 100vw;
   height: 100vh;
 
-  justify-content: center;
-  align-items: center;
-}
-
-div {
-  display: flex;
-  position: relative;
-  flex-direction: column;
-
-  width: 10em;
-  height: 10em;
-
-  background-color: aqua;
+  background-color: #CCCCCC;
 
   justify-content: center;
   align-items: center;
-}
-
-.hidden {
-  display: none;
 }

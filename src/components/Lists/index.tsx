@@ -1,9 +1,9 @@
 import React, { FormEvent, useContext, useEffect, useState } from 'react';
-import Button from './Button';
-import Form from './Form';
-import { getAllList } from '../data/get-all-lists';
-import { BaseList } from '../types/baseList';
-import { IdContext } from '../context/IdContex';
+import Button from '../Button';
+import Form from '../Form';
+import { getAllList } from '../../data/get-all-lists';
+import { BaseList } from '../../types/baseList';
+import { IdContext } from '../../context/IdContex';
 
 export default function Lists(): JSX.Element {
   const [newList, setNewList] = useState<BaseList>();
