@@ -4,11 +4,13 @@ import Form from '../Form';
 import { getAllList } from '../../data/get-all-lists';
 import { IdContext } from '../../context/IdContex';
 import { getList } from '../../data/get-list';
+import './style.css';
+import { BaseList } from '../../types/baseList';
 
 export default function Tasks(): JSX.Element {
   const { id } = useContext(IdContext);
   const [newTask, setNewTask] = useState('');
-  const [list, setList] = useState(getList(id));
+  const [list, setList] = useState<BaseList>({ id: 0, name: '', tasks: [] });
   const [showForm, setShowForm] = useState(false);
   const [indexEdit, setIndexEdit] = useState(-1);
 
@@ -16,12 +18,13 @@ export default function Tasks(): JSX.Element {
 
   useEffect(() => {
     setList(getList(id));
-  }, [list]);
+  }, [id]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const newTasks = [...list.tasks];
+    const tasks = getList(id).tasks;
+    const newTasks = [...tasks];
 
     if (indexEdit == -1) {
       newTasks.push(newTask);
@@ -33,15 +36,18 @@ export default function Tasks(): JSX.Element {
       list.tasks = newTasks;
 
       setNewTask('');
+      setIndexEdit(-1);
     }
 
     allLists.map((el, index) => {
       if (el.id == list.id) {
+        console.log(list);
         allLists[index] = list;
 
         const json = JSON.stringify(allLists);
         localStorage.setItem('listTask', json);
 
+        // setList(getList(id));
         return;
       }
     });
@@ -56,6 +62,8 @@ export default function Tasks(): JSX.Element {
 
         const json = JSON.stringify(allLists);
         localStorage.setItem('listTask', json);
+
+        setList(getList(id));
         return;
       }
     });
@@ -67,27 +75,29 @@ export default function Tasks(): JSX.Element {
         {list.tasks &&
           list.tasks.map((task, index) => (
             <li key={index}>
-              {task}
-
-              <Button
-                text="del"
-                onClick={() => {
-                  handleDelete(index);
-                }}
-              />
-              <Button
-                text="edit"
-                onClick={() => {
-                  setShowForm(true);
-                  setNewTask(task);
-                  setIndexEdit(index);
-                }}
-              />
+              <div>{task}</div>
+              <span>
+                <Button
+                  text="del"
+                  onClick={() => {
+                    handleDelete(index);
+                  }}
+                />
+                <Button
+                  text="edit"
+                  onClick={() => {
+                    setShowForm(true);
+                    setNewTask(task);
+                    setIndexEdit(index);
+                  }}
+                />
+              </span>
             </li>
           ))}
-
         {id != 0 ? (
-          <Button text="add task" onClick={() => setShowForm(!showForm)} />
+          <div className="btn-add">
+            <Button text="+" onClick={() => setShowForm(!showForm)} />
+          </div>
         ) : (
           ''
         )}

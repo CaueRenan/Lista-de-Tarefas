@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext, useEffect, useState } from 'react';
+import React, { FormEvent, useContext, useState } from 'react';
 import Button from '../Button';
 import Form from '../Form';
 import { getAllList } from '../../data/get-all-lists';
@@ -7,15 +7,12 @@ import { IdContext } from '../../context/IdContex';
 
 export default function Lists(): JSX.Element {
   const [newList, setNewList] = useState<BaseList>();
+  //eslint-disable-next-line
   const [lists, setLists] = useState(getAllList());
   const [showForm, setShowForm] = useState(false);
   const [indexEdit, setIndexEdit] = useState(-1);
   const [inputValue, setInputValue] = useState('');
   const { id, currentList } = useContext(IdContext);
-
-  useEffect(() => {
-    setLists(getAllList());
-  }, [lists]);
 
   const handleChange = (e: string) => {
     setInputValue(e);
@@ -52,6 +49,8 @@ export default function Lists(): JSX.Element {
 
     const json = JSON.stringify(newLists);
     localStorage.setItem('listTask', json);
+
+    setLists(getAllList());
   };
   const deleteList = (idIndex: number, index: number) => {
     if (idIndex == id) {
@@ -62,6 +61,8 @@ export default function Lists(): JSX.Element {
 
     const json = JSON.stringify(lists);
     localStorage.setItem('listTask', json);
+
+    setLists(getAllList());
   };
 
   return (
@@ -71,7 +72,6 @@ export default function Lists(): JSX.Element {
           <li
             key={index}
             onClick={() => {
-              console.log('oi');
               currentList(list.id);
               setIndexEdit(index);
             }}
