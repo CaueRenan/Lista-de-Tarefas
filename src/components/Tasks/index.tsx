@@ -1,16 +1,19 @@
-import React, { FormEvent, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '../Button';
 import Form from '../Form';
 import { getAllList } from '../../data/get-all-lists';
 import { IdContext } from '../../context/IdContex';
 import { getList } from '../../data/get-list';
-import './style.css';
+import './style/index.css';
 import { BaseList } from '../../types/baseList';
+import { MdDeleteOutline } from 'react-icons/md';
 
 export default function Tasks(): JSX.Element {
   const { id } = useContext(IdContext);
-  const [newTask, setNewTask] = useState('');
   const [list, setList] = useState<BaseList>({ id: 0, name: '', tasks: [] });
+  const [newTask, setNewTask] = useState('');
+  const [completedTasks, setCompletedTasks] = useState<string[]>([]);
+
   const [showForm, setShowForm] = useState(false);
   const [indexEdit, setIndexEdit] = useState(-1);
 
@@ -20,9 +23,7 @@ export default function Tasks(): JSX.Element {
     setList(getList(id));
   }, [id]);
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
+  const handleSubmit = () => {
     const tasks = getList(id).tasks;
     const newTasks = [...tasks];
 
@@ -41,13 +42,10 @@ export default function Tasks(): JSX.Element {
 
     allLists.map((el, index) => {
       if (el.id == list.id) {
-        console.log(list);
         allLists[index] = list;
 
         const json = JSON.stringify(allLists);
         localStorage.setItem('listTask', json);
-
-        // setList(getList(id));
         return;
       }
     });
@@ -62,7 +60,27 @@ export default function Tasks(): JSX.Element {
 
         const json = JSON.stringify(allLists);
         localStorage.setItem('listTask', json);
+        setList(getList(id));
+        return;
+      }
+    });
+  };
 
+  const notCompleted = (task: string, i: number) => {
+    const tasks = getList(id).tasks;
+    const newTasks = [...tasks];
+
+    newTasks.push(task);
+    list.tasks = newTasks;
+
+    allLists.map((el, index) => {
+      if (el.id == list.id) {
+        allLists[index] = list;
+
+        const json = JSON.stringify(allLists);
+        localStorage.setItem('listTask', json);
+
+        completedTasks.splice(i, 1);
         setList(getList(id));
         return;
       }
@@ -71,26 +89,45 @@ export default function Tasks(): JSX.Element {
 
   return (
     <main>
-      <ul>
+      <ul className="tasks">
         {list.tasks &&
           list.tasks.map((task, index) => (
             <li key={index}>
-              <div>{task}</div>
+              <div className="bg">
+                <div
+                  onClick={() => {
+                    const i = [...completedTasks, task];
+                    setCompletedTasks(i);
+                    handleDelete(index);
+                  }}
+                ></div>
+              </div>
+              <div
+                className="description"
+                onClick={() => {
+                  setShowForm(true);
+                  setNewTask(task);
+                  setIndexEdit(index);
+                }}
+              >
+                {task}
+              </div>
               <span>
                 <Button
-                  text="del"
+                  icon={<MdDeleteOutline size={17} />}
                   onClick={() => {
                     handleDelete(index);
                   }}
                 />
-                <Button
+                <button onClick={() => handleDelete}></button>
+                {/* <Button
                   text="edit"
                   onClick={() => {
                     setShowForm(true);
                     setNewTask(task);
                     setIndexEdit(index);
                   }}
-                />
+                /> */}
               </span>
             </li>
           ))}
@@ -101,11 +138,21 @@ export default function Tasks(): JSX.Element {
         ) : (
           ''
         )}
+        <ul>
+          {completedTasks.map((t, i) => (
+            <li key={i} onClick={() => notCompleted(t, i)}>
+              {t}
+            </li>
+          ))}
+        </ul>
       </ul>
       {showForm && (
         <Form
           inputChange={(e) => setNewTask(e.target.value)}
-          formSubmit={(e) => handleSubmit(e)}
+          formSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
           value={newTask}
           textButton="to salve"
         />

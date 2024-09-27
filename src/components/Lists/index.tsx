@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '../Button';
 import Form from '../Form';
 import { getAllList } from '../../data/get-all-lists';
@@ -7,7 +7,6 @@ import { IdContext } from '../../context/IdContex';
 
 export default function Lists(): JSX.Element {
   const [newList, setNewList] = useState<BaseList>();
-  //eslint-disable-next-line
   const [lists, setLists] = useState(getAllList());
   const [showForm, setShowForm] = useState(false);
   const [indexEdit, setIndexEdit] = useState(-1);
@@ -32,9 +31,7 @@ export default function Lists(): JSX.Element {
     }
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
+  const handleSubmit = () => {
     const newLists: BaseList[] = [...lists];
 
     if (!newList) return;
@@ -53,15 +50,14 @@ export default function Lists(): JSX.Element {
     setLists(getAllList());
   };
   const deleteList = (idIndex: number, index: number) => {
-    if (idIndex == id) {
-      currentList(0);
-    }
-
     lists.splice(index, 1);
 
     const json = JSON.stringify(lists);
     localStorage.setItem('listTask', json);
 
+    if (idIndex == id) {
+      currentList(0);
+    }
     setLists(getAllList());
   };
 
@@ -103,13 +99,17 @@ export default function Lists(): JSX.Element {
         text="add list"
         onClick={() => {
           setShowForm(!showForm);
+          currentList(0);
           setIndexEdit(-1);
         }}
       />
       {showForm && (
         <Form
           inputChange={(e) => handleChange(e.target.value)}
-          formSubmit={(e) => handleSubmit(e)}
+          formSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
           value={inputValue}
           textButton="to salve"
         />
