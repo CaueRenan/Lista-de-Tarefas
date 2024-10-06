@@ -1,0 +1,15 @@
+.list-description {
+  display: flex;
+  border: 2.7px solid black;
+  border-radius: 15px 15px 0px 0px;
+  padding: 5px 5px 5px 5px;
+
+  background-color: #46734D;
+  color: #E0D1C2;
+
+  font-size: 28pt;
+  justify-content: center;
+
+  text-transform: uppercase;
+  font-weight: bolder;
+}

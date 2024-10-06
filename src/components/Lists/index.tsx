@@ -4,6 +4,8 @@ import Form from '../Form';
 import { getAllList } from '../../data/get-all-lists';
 import { BaseList } from '../../types/baseList';
 import { IdContext } from '../../context/IdContex';
+import { IoAddCircle } from 'react-icons/io5';
+import './style/index.css';
 
 export default function Lists(): JSX.Element {
   const [newList, setNewList] = useState<BaseList>();
@@ -11,7 +13,8 @@ export default function Lists(): JSX.Element {
   const [showForm, setShowForm] = useState(false);
   const [indexEdit, setIndexEdit] = useState(-1);
   const [inputValue, setInputValue] = useState('');
-  const { id, currentList } = useContext(IdContext);
+  // const { id, currentList } = useContext(IdContext);
+  const { currentList } = useContext(IdContext);
 
   const handleChange = (e: string) => {
     setInputValue(e);
@@ -49,20 +52,20 @@ export default function Lists(): JSX.Element {
 
     setLists(getAllList());
   };
-  const deleteList = (idIndex: number, index: number) => {
-    lists.splice(index, 1);
+  // const deleteList = (idIndex: number, index: number) => {
+  //   lists.splice(index, 1);
 
-    const json = JSON.stringify(lists);
-    localStorage.setItem('listTask', json);
+  //   const json = JSON.stringify(lists);
+  //   localStorage.setItem('listTask', json);
 
-    if (idIndex == id) {
-      currentList(0);
-    }
-    setLists(getAllList());
-  };
+  //   if (idIndex == id) {
+  //     currentList(0);
+  //   }
+  //   setLists(getAllList());
+  // };
 
   return (
-    <aside>
+    <aside className="container-list">
       <ul>
         {lists.map((list, index) => (
           <li
@@ -72,8 +75,8 @@ export default function Lists(): JSX.Element {
               setIndexEdit(index);
             }}
           >
-            {list.name}
-            <span>
+            <div className="name-list">{list.name}</div>
+            {/* <span>
               <Button
                 text="del"
                 onClick={(e) => {
@@ -91,18 +94,23 @@ export default function Lists(): JSX.Element {
                   }}
                 />
               )}
-            </span>
+            </span> */}
           </li>
         ))}
       </ul>
-      <Button
-        text="add list"
-        onClick={() => {
-          setShowForm(!showForm);
-          currentList(0);
-          setIndexEdit(-1);
-        }}
-      />
+      <div className="list-container-button">
+        <div className="hide-line"></div>
+        <div className="bg-button">
+          <Button
+            icon={<IoAddCircle size={35} />}
+            onClick={() => {
+              setShowForm(!showForm);
+              currentList(0);
+              setIndexEdit(-1);
+            }}
+          />
+        </div>
+      </div>
       {showForm && (
         <Form
           inputChange={(e) => handleChange(e.target.value)}

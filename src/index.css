@@ -15,3 +15,23 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+main {
+  display: flex;
+
+  flex-direction: row;
+
+  align-items: start;
+  justify-content: center;
+}
+
+ul {
+  list-style: none;
+}
+
+.app-list {
+  display: flex;
+
+  margin-right: 10em;
+  flex-direction: column;
+}

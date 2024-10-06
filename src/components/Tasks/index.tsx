@@ -7,6 +7,8 @@ import { getList } from '../../data/get-list';
 import './style/index.css';
 import { BaseList } from '../../types/baseList';
 import { MdDeleteOutline } from 'react-icons/md';
+import { IoAddCircleOutline } from 'react-icons/io5';
+import { MdOutlineDone } from 'react-icons/md';
 
 export default function Tasks(): JSX.Element {
   const { id } = useContext(IdContext);
@@ -88,12 +90,12 @@ export default function Tasks(): JSX.Element {
   };
 
   return (
-    <main>
+    <>
       <ul className="tasks">
         {list.tasks &&
           list.tasks.map((task, index) => (
             <li key={index}>
-              <div className="bg">
+              <div className="bg-check">
                 <div
                   onClick={() => {
                     const i = [...completedTasks, task];
@@ -132,20 +134,34 @@ export default function Tasks(): JSX.Element {
             </li>
           ))}
         {id != 0 ? (
-          <div className="btn-add">
-            <Button text="+" onClick={() => setShowForm(!showForm)} />
+          <div className="task-container-add">
+            <Button
+              icon={<IoAddCircleOutline size={50} />}
+              onClick={() => setShowForm(!showForm)}
+            />
           </div>
         ) : (
           ''
         )}
-        <ul>
-          {completedTasks.map((t, i) => (
-            <li key={i} onClick={() => notCompleted(t, i)}>
-              {t}
-            </li>
-          ))}
-        </ul>
       </ul>
+      {list.tasks && (
+        <div className="bg-completed-task">
+          <div className="container-completed-task">
+            <div className="icon-completed-task">
+              <div>
+                <MdOutlineDone size={27} />
+              </div>
+            </div>
+            <ul className="completed-task">
+              {completedTasks.map((t, i) => (
+                <li key={i} onClick={() => notCompleted(t, i)}>
+                  {t}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
       {showForm && (
         <Form
           inputChange={(e) => setNewTask(e.target.value)}
@@ -157,6 +173,6 @@ export default function Tasks(): JSX.Element {
           textButton="to salve"
         />
       )}
-    </main>
+    </>
   );
 }

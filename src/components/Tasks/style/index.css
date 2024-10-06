@@ -1,21 +1,18 @@
-main {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-}
-
 .tasks {
   display: flex;
 
   height: 450px;
-  width: 350px;
+  min-width: 380px;
+  width: auto;
   border: 2.7px solid black;
   border-radius: 0 0 4% 4%;
+  margin-top: 6px;
 
   background-color: #E0D1C2;
 
   list-style: none;
   flex-direction: column;
+  /* justify-content: space-between; */
   align-items: center;
   gap: 20px;
 }
@@ -55,7 +52,7 @@ main {
   cursor: pointer;
 }
 
-main li span {
+.tasks li span {
   display: flex;
 
   height: 100%;
@@ -70,19 +67,19 @@ main li span {
   align-items: center;
 }
 
-main li span button {
+.tasks li span button {
   color: #F6EADE;
 
   border: none;
   background-color: #949494;
 }
 
-main li span,
-main li span button:hover {
+.tasks li span,
+.tasks li span button:hover {
   cursor: pointer;
 }
 
-.bg {
+.bg-check {
   display: flex;
   position: absolute;
 
@@ -99,7 +96,7 @@ main li span button:hover {
   align-items: center;
 }
 
-.bg div {
+.bg-check div {
   display: flex;
 
   width: 75%;
@@ -112,27 +109,87 @@ main li span button:hover {
 }
 
 
-.btn-add {
+.task-container-add {
   display: flex;
   position: relative;
 
-  height: 30px;
-  width: 40px;
-  margin-left: 400px;
-
-  border: 2.7px solid black;
-  border-end-end-radius: 45%;
-  border-start-end-radius: 45%;
-
-  color: black;
-  background-color: #D9D9D9;
+  margin-top: 10px;
 
   justify-content: center;
   align-items: center;
 }
 
-.btn-add button {
+.task-container-add button {
   border: none;
-  background-color: #D9D9D9;
+  color: #949494;
+  background-color: #E0D1C2;
 
+}
+
+.bg-completed-task {
+  display: flex;
+  background-color: aqua;
+
+  justify-content: end;
+  align-items: end;
+}
+
+.container-completed-task {
+  display: flex;
+  position: fixed;
+
+  min-height: 2.5em;
+  min-width: 9em;
+  padding: 10px;
+  border: 2px solid black;
+  border-right: 1px solid black;
+  border-radius: 10px 0px 10px 10px;
+  margin-bottom: 15px;
+  margin-right: -4px;
+
+  background-color: #6B9C72;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-completed-task {
+  display: flex;
+  position: absolute;
+  top: -16px;
+  left: -16px;
+
+  width: 40px;
+  height: 40px;
+  /* border: 2px solid black; */
+  border-radius: 100%;
+
+  background-color: #6B9C72;
+  justify-content: center;
+  align-items: center;
+
+  place-items: center;
+}
+
+.icon-completed-task div {
+  display: flex;
+
+  height: 75%;
+  width: 75%;
+  border-radius: 100%;
+
+  background-color: #223124;
+  color: #9cb69e;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.container-completed-task ul {
+  display: flex;
+  gap: 5px;
+
+  text-decoration: line-through;
+  flex-direction: column;
+  /* background-color: #949494; */
 }
