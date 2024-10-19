@@ -9,6 +9,7 @@ import { BaseList } from '../../types/baseList';
 import { MdDeleteOutline } from 'react-icons/md';
 import { IoAddCircleOutline } from 'react-icons/io5';
 import { MdOutlineDone } from 'react-icons/md';
+import { IoMdSave } from 'react-icons/io';
 
 export default function Tasks(): JSX.Element {
   const { id } = useContext(IdContext);
@@ -36,6 +37,7 @@ export default function Tasks(): JSX.Element {
       setNewTask('');
     } else {
       newTasks[indexEdit] = newTask;
+
       list.tasks = newTasks;
 
       setNewTask('');
@@ -93,48 +95,63 @@ export default function Tasks(): JSX.Element {
     <>
       <ul className="tasks">
         {list.tasks &&
-          list.tasks.map((task, index) => (
-            <li key={index}>
-              <div className="bg-check">
+          list.tasks.map((task, index) =>
+            indexEdit != index ? (
+              <li key={index}>
+                <div className="bg-check">
+                  <div
+                    onClick={() => {
+                      const i = [...completedTasks, task];
+                      setCompletedTasks(i);
+                      handleDelete(index);
+                    }}
+                  ></div>
+                </div>
                 <div
+                  className="description"
                   onClick={() => {
-                    const i = [...completedTasks, task];
-                    setCompletedTasks(i);
-                    handleDelete(index);
-                  }}
-                ></div>
-              </div>
-              <div
-                className="description"
-                onClick={() => {
-                  setShowForm(true);
-                  setNewTask(task);
-                  setIndexEdit(index);
-                }}
-              >
-                {task}
-              </div>
-              <span>
-                <Button
-                  icon={<MdDeleteOutline size={17} />}
-                  onClick={() => {
-                    handleDelete(index);
-                  }}
-                />
-                <button onClick={() => handleDelete}></button>
-                {/* <Button
-                  text="edit"
-                  onClick={() => {
-                    setShowForm(true);
-                    setNewTask(task);
                     setIndexEdit(index);
+                    setNewTask(task);
                   }}
-                /> */}
-              </span>
-            </li>
-          ))}
+                >
+                  {task}
+                </div>
+                <span>
+                  <Button
+                    icon={<MdDeleteOutline size={17} />}
+                    onClick={() => {
+                      handleDelete(index);
+                    }}
+                  />
+                </span>
+              </li>
+            ) : (
+              <li key={index} className="container-edit">
+                <Form
+                  inputChange={(e) => setNewTask(e.target.value)}
+                  formSubmit={(e) => {
+                    e.preventDefault();
+                    handleSubmit();
+                  }}
+                  value={newTask}
+                  icon={<IoMdSave size={23} />}
+                />
+              </li>
+            ),
+          )}
         {id != 0 ? (
           <div className="task-container-add">
+            {showForm && (
+              <Form
+                inputChange={(e) => setNewTask(e.target.value)}
+                formSubmit={(e) => {
+                  e.preventDefault();
+                  handleSubmit();
+                }}
+                value={newTask}
+                icon={<IoMdSave size={23} />}
+              />
+            )}
             <Button
               icon={<IoAddCircleOutline size={50} />}
               onClick={() => setShowForm(!showForm)}
@@ -161,17 +178,6 @@ export default function Tasks(): JSX.Element {
             </ul>
           </div>
         </div>
-      )}
-      {showForm && (
-        <Form
-          inputChange={(e) => setNewTask(e.target.value)}
-          formSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
-          value={newTask}
-          textButton="to salve"
-        />
       )}
     </>
   );

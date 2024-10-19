@@ -10,13 +10,16 @@
 
   text-transform: uppercase;
   font-weight: bolder;
+  letter-spacing: 1px;
+  font-size: 10pt;
 
 }
 
 .container-list ul {
   display: flex;
 
-  padding: 10px 10px 20px 10px;
+  padding: 10px;
+  padding-bottom: 20px;
   border: 2.7px solid black;
   border-radius: 15px;
 
@@ -26,7 +29,6 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-
 }
 
 .container-list ul li {
@@ -35,23 +37,65 @@
 
   padding: 6px 5px 6px 5px;
   border-radius: 9px;
+
   background-color: #D9D9D9;
 
   justify-content: center;
+}
+
+.container-list ul li:hover .name-list {
+  border-radius: 10px 0px 0px 10px;
+
 }
 
 .name-list {
   display: flex;
 
   width: 100%;
-  padding: 5px 25px 5px 25px;
+  padding: 5px 18px;
   border-radius: 10px;
 
   background-color: #264f73;
   color: white;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.425);
   justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
+
+.container-list ul li span {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: start;
+}
+
+
+.container-list ul li span button {
+  border: none;
+  border-left: 1.5px solid #e6e3e3;
+  padding: 8px;
+
+  background: #264f73;
+  color: #e6e3e3;
+
+}
+
+.container-list ul li span button:hover {
+  cursor: pointer;
+}
+
+.container-list ul li span button:first-child {
+  border-bottom: 1.5px solid #e6e3e3;
+  border-top-right-radius: 10px;
+
+}
+
+.container-list ul li span button:last-child {
+  border-bottom-right-radius: 10px;
+
+}
+
 
 .list-container-button {
   display: flex;
@@ -94,4 +138,58 @@
   background-color: #D9D9D9;
   color: #5C8863;
 
+}
+
+.bg-form-list {
+  display: flex;
+
+  width: 100%;
+  height: 40px;
+
+  border: none;
+  border-radius: 9px;
+
+  background-color: #D9D9D9;
+
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.container-list ul form {
+  display: flex;
+
+  width: 95%;
+  height: 80%;
+  border: none;
+  border-radius: 10px;
+  padding: 5px 0px;
+
+  background-color: #264f73;
+
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.container-list ul form input {
+  width: 78%;
+  height: 90%;
+  padding-left: 3px;
+  border: none;
+  border-radius: 7px;
+
+}
+
+.container-list ul form button {
+  color: white;
+  border: none;
+  margin-top: 2px;
+
+  background: none;
+}
+
+.bg-form-list.edit form {
+  height: 32px;
 }
