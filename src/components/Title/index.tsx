@@ -2,24 +2,27 @@ import React, { useContext, useEffect, useState } from 'react';
 import { IdContext } from '../../context/IdContex';
 import { getList } from '../../data/get-list';
 import Form from '../Form';
-import { IoMdSave } from 'react-icons/io';
-import './style/index.css';
+import Button from '../Button';
 import { getAllList } from '../../data/get-all-lists';
+import { IoMdSave } from 'react-icons/io';
+import { MdDeleteOutline } from 'react-icons/md';
+import { IoClose } from 'react-icons/io5';
+
+import './style/index.css';
 
 export default function Title(): JSX.Element {
-  const { id } = useContext(IdContext);
-  const list = getList(id);
-
+  const { id, currentList } = useContext(IdContext);
   const [showForm, setShowForm] = useState(false);
   const [listName, setListName] = useState('');
+  const list = getList(id);
+  const allList = getAllList();
 
   useEffect(() => {
+    setShowForm(false);
     setListName(list.name);
   }, [id]);
 
   const handleSubmit = () => {
-    const allList = getAllList();
-
     list.name = listName;
 
     allList.map((l) => {
@@ -35,26 +38,59 @@ export default function Title(): JSX.Element {
     setShowForm(false);
   };
 
+  const handleDelete = () => {
+    const allList = getAllList();
+
+    allList.map((list, index) => {
+      if (list.id == id) {
+        allList.splice(index, 1);
+        return;
+      }
+    });
+
+    const json = JSON.stringify(allList);
+    localStorage.setItem('listTask', json);
+
+    currentList(0);
+    setShowForm(false);
+  };
+
   return (
     <>
-      <header onClick={() => setShowForm(true)}>
+      <header>
         {id == 0 ? (
-          ''
-        ) : !showForm ? (
-          <div className="list-description">{listName}</div>
+          <div className="list-description initial">
+            {allList.length > 0 && id == 0
+              ? 'Selecione uma lista'
+              : 'Adicione uma nova lista'}
+          </div>
+        ) : showForm == false ? (
+          <div className="list-description" onClick={() => setShowForm(true)}>
+            {listName}
+          </div>
         ) : (
           <div className="list-description">
-            {
-              <Form
-                inputChange={(e) => setListName(e.target.value)}
-                formSubmit={(e) => {
-                  e.preventDefault();
-                  handleSubmit();
+            <Form
+              inputChange={(e) => setListName(e.target.value)}
+              formSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+              }}
+              value={listName}
+              icon={<IoMdSave size={35} />}
+            />
+            <span>
+              <Button
+                icon={<MdDeleteOutline size={35} />}
+                onClick={() => {
+                  handleDelete();
                 }}
-                value={listName}
-                icon={<IoMdSave size={35} />}
               />
-            }
+              <Button
+                icon={<IoClose size={32} />}
+                onClick={() => setShowForm(false)}
+              />
+            </span>
           </div>
         )}
       </header>

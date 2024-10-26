@@ -12,7 +12,6 @@
 
   list-style: none;
   flex-direction: column;
-  /* justify-content: space-between; */
   align-items: center;
   gap: 20px;
 }
@@ -75,9 +74,14 @@
   background-color: #949494;
 }
 
-.tasks li span,
-.tasks li span button:hover {
+.tasks li span:hover {
   cursor: pointer;
+
+}
+
+.tasks li span:hover button {
+  cursor: pointer;
+  color: rgb(139, 58, 58);
 }
 
 .bg-check {
@@ -97,6 +101,8 @@
   align-items: center;
 }
 
+
+
 .bg-check div {
   display: flex;
 
@@ -104,11 +110,17 @@
   height: 73%;
   border-radius: 50%;
 
+  color: #F6EADE;
   background-color: #F6EADE;
 
   cursor: pointer;
+  justify-content: center;
+  align-items: center;
 }
 
+.bg-check .verde {
+  background-color: #6B9C72;
+}
 
 .task-container-add {
   display: flex;
@@ -129,6 +141,17 @@
 
 }
 
+.task-container-add button:hover {
+  cursor: pointer;
+}
+
+.task-container-add .btn-closed {
+  color: rgb(178, 74, 74);
+
+  transform: rotate(45deg);
+
+}
+
 .task-container-add form {
   display: flex;
 
@@ -137,7 +160,6 @@
   padding: 5px;
   border: 4px solid #949494;
   border-radius: 20px;
-  /* margin-top: -10px; */
   margin-bottom: 18px;
 
   background-color: #E0D1C2;
@@ -168,8 +190,6 @@
   padding: 5px;
   border: 4px solid #949494;
   border-radius: 20px;
-  /* margin-top: -10px; */
-  margin-bottom: 18px;
 
   background-color: #E0D1C2;
 
@@ -200,11 +220,12 @@
 
 .bg-completed-task {
   display: flex;
-  background-color: aqua;
 
   justify-content: end;
   align-items: end;
 }
+
+
 
 .container-completed-task {
   display: flex;
@@ -225,6 +246,25 @@
   align-items: center;
 }
 
+.container-completed-task.closed {
+  min-height: 0;
+  min-width: 0;
+  border: none;
+  margin-right: -10px;
+
+}
+
+.icon-completed-task.closed {
+  background-color: #6B9C72;
+
+}
+
+.icon-completed-task.closed div {
+  background-color: #6B9C72;
+  color: #ffffff;
+
+}
+
 .icon-completed-task {
   display: flex;
   position: absolute;
@@ -233,7 +273,6 @@
 
   width: 40px;
   height: 40px;
-  /* border: 2px solid black; */
   border-radius: 100%;
 
   background-color: #6B9C72;
@@ -255,13 +294,25 @@
 
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .container-completed-task ul {
   display: flex;
   gap: 5px;
 
-  text-decoration: line-through;
   flex-direction: column;
-  /* background-color: #949494; */
+}
+
+.container-completed-task li {
+  text-decoration: line-through;
+
+}
+
+.container-completed-task li:hover {
+  cursor: pointer;
+
+  text-decoration: none;
+  color: #f8e5d3;
+
 }

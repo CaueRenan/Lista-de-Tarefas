@@ -19,7 +19,6 @@
   display: flex;
 
   padding: 10px;
-  padding-bottom: 20px;
   border: 2.7px solid black;
   border-radius: 15px;
 
@@ -28,7 +27,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
+}
+
+
+
+.container-list ul.hidden {
+  visibility: hidden;
 }
 
 .container-list ul li {
@@ -43,16 +48,15 @@
   justify-content: center;
 }
 
-.container-list ul li:hover .name-list {
-  border-radius: 10px 0px 0px 10px;
-
+.container-list li:last-child {
+  margin-bottom: 10px;
 }
 
 .name-list {
   display: flex;
 
   width: 100%;
-  padding: 5px 18px;
+  padding: 8px 18px;
   border-radius: 10px;
 
   background-color: #264f73;
@@ -61,17 +65,29 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+
+}
+
+
+
+.li-open .name-list {
+  border-radius: 10px 0px 0px 10px;
+  font-size: 13pt;
+
+  transition: all 1ms;
 }
 
 .container-list ul li span {
   display: flex;
   flex-direction: column;
 
+  background: none;
+
   justify-content: start;
 }
 
 
-.container-list ul li span button {
+.control-list button {
   border: none;
   border-left: 1.5px solid #e6e3e3;
   padding: 8px;
@@ -81,21 +97,48 @@
 
 }
 
-.container-list ul li span button:hover {
+
+
+.control-list button:hover {
   cursor: pointer;
 }
 
-.container-list ul li span button:first-child {
+.control-list button:first-child {
   border-bottom: 1.5px solid #e6e3e3;
   border-top-right-radius: 10px;
 
 }
 
-.container-list ul li span button:last-child {
+.control-list button:last-child {
   border-bottom-right-radius: 10px;
 
 }
 
+.control-list.red button {
+  background-color: #8b3239;
+
+}
+
+
+.control-list.blue button {
+  background-color: #264f73;
+}
+
+.control-list.orange button {
+  background-color: rgb(147, 113, 50);
+}
+
+.red {
+  background-color: #8b3239;
+}
+
+.blue {
+  background-color: #264f73;
+}
+
+.orange {
+  background-color: rgb(147, 113, 50);
+}
 
 .list-container-button {
   display: flex;
@@ -109,14 +152,28 @@
   background-color: #b2b2b2;
 
   flex-direction: column;
+
+}
+
+.list-container-button.hidden {
+  border: none;
+  background: none;
+}
+
+.list-container-button.hidden .hide-line {
+  visibility: hidden;
+}
+
+.list-container-button.hidden button {
+  background-color: #cccccc;
 }
 
 .hide-line {
   display: flex;
   position: absolute;
 
-  width: 51px;
-  height: 3px;
+  width: 45px;
+  height: 2px;
   margin-top: -2px;
   margin-left: -5px;
 
@@ -126,19 +183,31 @@
 
 .list-container-button .bg-button {
   display: flex;
-  padding: 3px;
+  width: 100%;
+  height: 35px;
   border-radius: 100%;
+  background-color: #D9D9D9;
 
 }
+
 
 .list-container-button button {
   border: none;
   border-radius: 100%;
 
-  background-color: #D9D9D9;
   color: #5C8863;
+  background: none;
+
+  cursor: pointer;
+}
+
+.list-container-button .btn-closed {
+  color: rgb(178, 74, 74);
+
+  transform: rotate(45deg);
 
 }
+
 
 .bg-form-list {
   display: flex;
@@ -154,8 +223,6 @@
   justify-content: center;
   align-items: center;
 }
-
-
 
 .container-list ul form {
   display: flex;
@@ -183,11 +250,14 @@
 }
 
 .container-list ul form button {
+  display: flex;
   color: white;
   border: none;
   margin-top: 2px;
 
   background: none;
+
+  cursor: pointer;
 }
 
 .bg-form-list.edit form {

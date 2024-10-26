@@ -8,18 +8,18 @@ import { IoAddCircle } from 'react-icons/io5';
 import { IoMdSave } from 'react-icons/io';
 import { MdEdit } from 'react-icons/md';
 import { MdDeleteOutline } from 'react-icons/md';
-
 import './style/index.css';
 
 export default function Lists(): JSX.Element {
   const [newList, setNewList] = useState<BaseList>();
   const [lists, setLists] = useState(getAllList());
   const [showForm, setShowForm] = useState(false);
-  const [showListControl, setShowListControl] = useState(-1);
+  const [showFormEdit, setShowFormEdit] = useState(-1);
+  const [showControl, setShowControl] = useState(-1);
   const [indexEdit, setIndexEdit] = useState(-1);
   const [inputValue, setInputValue] = useState('');
   const { id, currentList } = useContext(IdContext);
-  // const { currentList } = useContext(IdContext);
+  const listColor = ['blue', 'red', 'orange', 'blue', 'red', 'orange'];
 
   useEffect(() => {
     setLists(getAllList());
@@ -28,7 +28,7 @@ export default function Lists(): JSX.Element {
   const handleChange = (e: string) => {
     setInputValue(e);
 
-    if (indexEdit !== -1) return setNewList({ ...lists[indexEdit], name: e });
+    if (indexEdit != -1) return setNewList({ ...lists[indexEdit], name: e });
 
     if (lists.length == 0) {
       setNewList({ id: 1, name: e, tasks: [] });
@@ -47,19 +47,25 @@ export default function Lists(): JSX.Element {
     const newLists: BaseList[] = [...lists];
 
     if (!newList) return;
+    if (inputValue == '') return;
+
+    if (lists.length < 1) currentList(newList.id);
 
     if (indexEdit == -1) {
       newLists.push(newList);
-      setInputValue('');
     } else {
       newLists[indexEdit] = newList;
-      setInputValue('');
-      setShowListControl(-1);
+      document
+        .getElementsByClassName('btn-closed')[0]
+        .classList.remove('btn-closed');
+
+      setShowFormEdit(-1);
     }
 
     const json = JSON.stringify(newLists);
     localStorage.setItem('listTask', json);
 
+    setInputValue('');
     setLists(getAllList());
   };
 
@@ -75,35 +81,65 @@ export default function Lists(): JSX.Element {
     setLists(getAllList());
   };
 
+  const showUl = () => {
+    if (lists.length < 1 && showForm == false) return 'hidden';
+    if (lists.length == 1 && id == lists[0].id && showForm == false)
+      return 'hidden';
+  };
+
   return (
     <aside className="container-list">
-      <ul>
+      <ul className={showUl()}>
         {lists.map((list, index) =>
           list.id == id ? (
             ''
-          ) : showListControl != index ? (
+          ) : showFormEdit != index ? (
             <li
               key={index}
               onClick={() => {
                 currentList(list.id);
                 setIndexEdit(index);
               }}
-              onMouseOver={() => {
-                if (!showForm) setIndexEdit(index);
+              onMouseOver={(e) => {
+                e.stopPropagation();
+
+                const btn = document
+                  .getElementsByClassName('list-container-button')[0]
+                  .getElementsByTagName('button')[0].classList;
+
+                if (btn.contains('btn-closed')) btn.remove('btn-closed');
+                if (showForm) setShowForm(false);
+                if (showFormEdit != -1) setShowFormEdit(-1);
+
+                e.currentTarget.classList.add('li-open');
+                setShowControl(index);
               }}
-              onMouseOut={() => {
-                setIndexEdit(-1);
+              onMouseOut={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                e.currentTarget.classList.remove('li-open');
+
+                setShowControl(-1);
               }}
             >
-              <div className="name-list">{list.name}</div>
-              {indexEdit == index && (
-                <span>
+              <div className={'name-list ' + listColor[index]}>{list.name}</div>
+              {showControl == index && (
+                <span className={'control-list ' + listColor[index]}>
                   <Button
                     icon={<MdEdit size={15} />}
                     onClick={(e) => {
-                      setShowListControl(index);
-                      e.stopPropagation();
+                      handleChange(list.name);
+
+                      const btnClosed = document
+                        .getElementsByClassName('list-container-button')[0]
+                        .getElementsByTagName('button')[0];
+
+                      btnClosed.classList.add('btn-closed');
+                      setIndexEdit(index);
+                      setShowFormEdit(index);
                       setInputValue(list.name);
+                      e.stopPropagation();
                     }}
                   />
                   <Button
@@ -144,17 +180,39 @@ export default function Lists(): JSX.Element {
           </div>
         )}
       </ul>
-      <div className="list-container-button">
+      <div className={'list-container-button ' + showUl()}>
         <div className="hide-line"></div>
         <div className="bg-button">
-          <Button
-            icon={<IoAddCircle size={35} />}
-            onClick={() => {
-              setShowForm(!showForm);
-              currentList(0);
-              setIndexEdit(-1);
-            }}
-          />
+          {showFormEdit == -1 ? (
+            <Button
+              icon={<IoAddCircle size={35} />}
+              onClick={(e) => {
+                setInputValue('');
+                const el = e.currentTarget.classList;
+
+                if (el.contains('btn-closed')) {
+                  el.remove('btn-closed');
+                } else {
+                  el.add('btn-closed');
+                }
+
+                setShowForm(!showForm);
+                setIndexEdit(-1);
+              }}
+            />
+          ) : (
+            <Button
+              icon={<IoAddCircle size={35} />}
+              onClick={(e) => {
+                e.currentTarget.classList.remove('btn-closed');
+
+                setInputValue('');
+                setIndexEdit(-1);
+                setShowFormEdit(-1);
+                setShowForm(!showForm);
+              }}
+            />
+          )}
         </div>
       </div>
     </aside>

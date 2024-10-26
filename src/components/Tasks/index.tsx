@@ -16,7 +16,7 @@ export default function Tasks(): JSX.Element {
   const [list, setList] = useState<BaseList>({ id: 0, name: '', tasks: [] });
   const [newTask, setNewTask] = useState('');
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
-
+  const [showCompletedTasks, setShowCompletedTasks] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [indexEdit, setIndexEdit] = useState(-1);
 
@@ -24,11 +24,14 @@ export default function Tasks(): JSX.Element {
 
   useEffect(() => {
     setList(getList(id));
+    setCompletedTasks([]);
   }, [id]);
 
   const handleSubmit = () => {
     const tasks = getList(id).tasks;
     const newTasks = [...tasks];
+
+    if (newTask == '') return;
 
     if (indexEdit == -1) {
       newTasks.push(newTask);
@@ -39,6 +42,11 @@ export default function Tasks(): JSX.Element {
       newTasks[indexEdit] = newTask;
 
       list.tasks = newTasks;
+
+      document
+        .getElementsByClassName('task-container-add')[0]
+        .getElementsByTagName('button')[0]
+        .classList.remove('btn-closed');
 
       setNewTask('');
       setIndexEdit(-1);
@@ -105,11 +113,25 @@ export default function Tasks(): JSX.Element {
                       setCompletedTasks(i);
                       handleDelete(index);
                     }}
-                  ></div>
+                    onMouseOver={(e) => {
+                      e.currentTarget.classList.add('verde');
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.classList.remove('verde');
+                    }}
+                  >
+                    <MdOutlineDone size={27} />
+                  </div>
                 </div>
                 <div
                   className="description"
                   onClick={() => {
+                    if (showForm) setShowForm(false);
+
+                    document
+                      .getElementsByClassName('task-container-add')[0]
+                      .getElementsByTagName('button')[0]
+                      .classList.add('btn-closed');
                     setIndexEdit(index);
                     setNewTask(task);
                   }}
@@ -154,29 +176,55 @@ export default function Tasks(): JSX.Element {
             )}
             <Button
               icon={<IoAddCircleOutline size={50} />}
-              onClick={() => setShowForm(!showForm)}
+              onClick={(e) => {
+                e.currentTarget.classList.toggle('btn-closed');
+
+                if (indexEdit != -1) {
+                  setIndexEdit(-1);
+                } else {
+                  setShowForm(!showForm);
+                }
+                setNewTask('');
+              }}
             />
           </div>
         ) : (
           ''
         )}
       </ul>
-      {list.tasks && (
+      {completedTasks.length > 0 && (
         <div className="bg-completed-task">
-          <div className="container-completed-task">
-            <div className="icon-completed-task">
-              <div>
-                <MdOutlineDone size={27} />
+          {showCompletedTasks ? (
+            <div className="container-completed-task">
+              <div className="icon-completed-task">
+                <div onClick={() => setShowCompletedTasks(!showCompletedTasks)}>
+                  <MdOutlineDone size={27} />
+                </div>
+              </div>
+              <ul className="completed-task">
+                {completedTasks.map((t, i) => (
+                  <li
+                    key={i}
+                    onClick={() => {
+                      notCompleted(t, i);
+                      if (completedTasks.length < 1)
+                        setShowCompletedTasks(false);
+                    }}
+                  >
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <div className="container-completed-task closed">
+              <div className="icon-completed-task closed">
+                <div onClick={() => setShowCompletedTasks(!showCompletedTasks)}>
+                  <MdOutlineDone size={27} />
+                </div>
               </div>
             </div>
-            <ul className="completed-task">
-              {completedTasks.map((t, i) => (
-                <li key={i} onClick={() => notCompleted(t, i)}>
-                  {t}
-                </li>
-              ))}
-            </ul>
-          </div>
+          )}
         </div>
       )}
     </>
